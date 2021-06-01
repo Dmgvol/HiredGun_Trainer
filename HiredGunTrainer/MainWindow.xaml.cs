@@ -11,10 +11,14 @@ namespace HiredGunTrainer {
         private float[] gameSpeeds = new float[4] { 1.0f, 2.0f, 4.0f, 0.5f };
         private int currGameSpeed = 0;
 
-        private float[] savedPos = new float[5]{0, 0, 0, 0, 0}; // X,Y,Z rotationSin, rotationCos
+        private float[] savedPos = new float[5]{0, 0, 0,  0, 0};
         private bool noclipFlag, ghostFlag, godFlag;
         private float playerSpeed = 0;
         private float[] playerPos = new float[3] { 0, 0, 0};
+
+        // pointers
+        private IntPtr vLookPtr, hLookPtr;
+        IntPtr xVelPtr, yVelPtr, zVelPtr, ghostPtr, godPtr, noclipPtr, movePtr, clipmovePtr, airPtr, collisionPtr, sumPtr, injPtr, gameSpeedPtr, mapNamePtr, angleSinPtr, angleCosPtr;
 
 
         private GlobalKeyboardHook kbHook = new GlobalKeyboardHook();
@@ -48,6 +52,11 @@ namespace HiredGunTrainer {
             if(!gameHook.hooked) return;
 
             // Read values
+            float x, y, z;
+            GameHook.game.ReadValue(gameHook.EP.Pointers["PlayerPos"].Item2, out x);
+            GameHook.game.ReadValue(gameHook.EP.Pointers["PlayerPos"].Item2 + 4, out y);
+            GameHook.game.ReadValue(gameHook.EP.Pointers["PlayerPos"].Item2 + 8, out z);
+            playerPos = new float[3] { x, y, z };
 
             // Update UI
             ToggleState(ghostFlag, ghostLabel);
@@ -86,7 +95,16 @@ namespace HiredGunTrainer {
         }
 
         public void DerefPointers() {
-            
+            gameHook.EP.DerefPointers(GameHook.game);
+
+            xVelPtr = gameHook.EP.Pointers["PlayerCollision"].Item2 + 0xC4;
+            yVelPtr = gameHook.EP.Pointers["PlayerCollision"].Item2 + 0xC8;
+            zVelPtr = gameHook.EP.Pointers["PlayerCollision"].Item2 + 0xCC;
+            movePtr = gameHook.EP.Pointers["PlayerCollision"].Item2 + 0x168;
+            airPtr = gameHook.EP.Pointers["PlayerCollision"].Item2 + 0x388;
+            clipmovePtr = gameHook.EP.Pointers["PlayerCollision"].Item2 + 0x199;
+            collisionPtr = gameHook.EP.Pointers["PlayerObject"].Item2 + 0x5C;
+
         }
 
         private void ToggleGhost() {
@@ -108,18 +126,49 @@ namespace HiredGunTrainer {
 
             noclipFlag = !noclipFlag;
             ToggleState(noclipFlag, noclipLabel);
+
+            IncInj();
+            byte[] byteToWrite = new byte[1];
+            if(noclipFlag) {
+                byteToWrite[0] = 0x0;
+                GameHook.game.WriteBytes(collisionPtr, new byte[1] { 0x44 });
+                GameHook.game.WriteBytes(movePtr, new byte[1] { 0x01 });
+                GameHook.game.WriteBytes(airPtr, new byte[1] { 0x60 });
+            } else {
+                byteToWrite[0] = 0x1;
+                GameHook.game.WriteBytes(movePtr, new byte[1] { 0x05 });
+                GameHook.game.WriteBytes(airPtr, new byte[1] { 0x48 });
+                GameHook.game.WriteBytes(collisionPtr, new byte[1] { 0x40 });
+                GameHook.game.WriteBytes(clipmovePtr, BitConverter.GetBytes(0x00458CA0));
+            }
+            GameHook.game.WriteBytes(noclipPtr, byteToWrite);
+        }
+
+        private void IncInj() {
+            int current;
+            GameHook.game.ReadValue<int>(injPtr, out current);
+            GameHook.game.WriteBytes(injPtr, BitConverter.GetBytes(current + 1));
         }
 
         private void SavePosition() {
             if(!gameHook.hooked) return;
 
+            float vlook, hlook;
+            GameHook.game.ReadValue(gameHook.EP.Pointers["PlayerController"].Item2 + 0x288, out vlook);
+            GameHook.game.ReadValue(gameHook.EP.Pointers["PlayerController"].Item2 + 0x28C, out hlook);
 
+            savedPos = new float[5] { playerPos[0], playerPos[1], playerPos[2], vlook, hlook};
         }
 
         private void TeleportPlayer() {
             if(!gameHook.hooked) return;
-
-
+            // location
+            GameHook.game.WriteValue(gameHook.EP.Pointers["PlayerPos"].Item2, savedPos[0]);
+            GameHook.game.WriteValue(gameHook.EP.Pointers["PlayerPos"].Item2 + 4, savedPos[1]);
+            GameHook.game.WriteValue(gameHook.EP.Pointers["PlayerPos"].Item2 + 8, savedPos[2]);
+            // rotation
+            GameHook.game.WriteValue(gameHook.EP.Pointers["PlayerController"].Item2 + 0x288, savedPos[3]);
+            GameHook.game.WriteValue(gameHook.EP.Pointers["PlayerController"].Item2 + 0x28C, savedPos[4]);
         }
 
         private void ChangeGameSpeed() {

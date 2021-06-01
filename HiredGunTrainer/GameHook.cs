@@ -3,8 +3,7 @@ using System.Windows;
 using System.Diagnostics;
 using System.Linq;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using System.ComponentModel;
+using HiredGunTrainer.MemoryUtils;
 
 namespace HiredGunTrainer {
     public class GameHook {
@@ -19,6 +18,8 @@ namespace HiredGunTrainer {
         public GameHook(MainWindow main) {
             this.main = main;
         }
+
+		public EasyPointers EP = new EasyPointers();
 
         private bool Hook() {
 			List<Process> processList = Process.GetProcesses().ToList().FindAll(x => x.ProcessName.Contains(PROCESS_NAME));
@@ -68,18 +69,14 @@ namespace HiredGunTrainer {
 
 		private void SetPointersByModuleSize(int moduleSize) {
 			switch(moduleSize) {
-				case 78856192:
-					
+				case 95641600:
+					Debug.WriteLine("found steam1");
+					EP.Add("PlayerPos", new DeepPointer(0x05534880, 0x30, 0x250, 0x130, 0x1d0));
+					EP.Add("PlayerController", new DeepPointer(0x05534880, 0x30, 0x250, 0xE0, 0x0));
+					EP.Add("PlayerObject", new DeepPointer(0x05534880, 0x30, 0x250, 0x0));
+					EP.Add("PlayerCollision", new DeepPointer(0x05534880, 0x30, 0x250, 0x5c));
 
-
-					//Debug.WriteLine("found steam6");
-					//capsuleDP = new DeepPointer(0x0438BB50, 0x30, 0x130, 0x0);
-					//mapNameDP = new DeepPointer(0x0438BB40, 0x30, 0xF8, 0x0);
-					//preciseTimeDP = new DeepPointer(0x04609420, 0x138, 0xB0, 0x128);
-					//hcDP = new DeepPointer(0x0438BB40, 0x330, 0x30);
-					//LoadingDP = new DeepPointer(0x044C4478, 0x1E8);
-					//reloadCounterDP = new DeepPointer(0x04609420, 0x128, 0x388);
-					//break;
+					break;
 
 				default:
 					main.updateTimer.Stop();
