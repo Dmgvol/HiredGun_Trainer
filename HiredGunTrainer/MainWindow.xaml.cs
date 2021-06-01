@@ -32,10 +32,10 @@ namespace HiredGunTrainer {
 
             // hotkeys
             kbHook.KeyDown += InputKeyDown;
-            kbHook.HookedKeys.Add(Keys.F1);
-            kbHook.HookedKeys.Add(Keys.F2);
-            kbHook.HookedKeys.Add(Keys.F3);
-            kbHook.HookedKeys.Add(Keys.F4);
+            //kbHook.HookedKeys.Add(Keys.F1);
+            //kbHook.HookedKeys.Add(Keys.F2);
+            //kbHook.HookedKeys.Add(Keys.F3);
+            //kbHook.HookedKeys.Add(Keys.F4);
             kbHook.HookedKeys.Add(Keys.F5);
             kbHook.HookedKeys.Add(Keys.F6);
             // update timer
@@ -45,6 +45,9 @@ namespace HiredGunTrainer {
             updateTimer.Tick += new EventHandler(Update);
             updateTimer.Start();
         }
+
+        DateTime? timeStamp = null;
+        private Vector3f posTmp;
 
         private void Update(object sender, EventArgs e) {
             // GAME HOOK
@@ -64,7 +67,28 @@ namespace HiredGunTrainer {
             ToggleState(noclipFlag, noclipLabel);
             SetGameSpeed();
             positionBlock.Text = $"{playerPos[0] / 100:0.00}\n{playerPos[1] / 100:0.00}\n{playerPos[2] / 100:0.00}";
-            speedLabel.Content = $"{playerSpeed} m/s";
+
+            // player speed
+            if(timeStamp == null) {
+                timeStamp = DateTime.Now;
+                posTmp = new Vector3f(x, y, z);
+            } else {
+                TimeSpan span = DateTime.Now - (DateTime)timeStamp;
+                if(span.TotalMilliseconds >= 300) {
+                    double spanRatio = 1000 / span.TotalMilliseconds;
+                    double distance = Math.Sqrt(
+                        Math.Pow(x - posTmp.X, 2) +
+                        Math.Pow(y - posTmp.Y, 2) +
+                        Math.Pow(z - posTmp.Z, 2));
+                    playerSpeed = (float)(distance * spanRatio) / 100;
+
+                timeStamp = DateTime.Now;
+                posTmp = new Vector3f(x, y, z);
+                }
+            }
+
+
+            speedLabel.Content = $"{(int)playerSpeed} m/s";
         }
 
 
@@ -127,21 +151,21 @@ namespace HiredGunTrainer {
             noclipFlag = !noclipFlag;
             ToggleState(noclipFlag, noclipLabel);
 
-            IncInj();
-            byte[] byteToWrite = new byte[1];
-            if(noclipFlag) {
-                byteToWrite[0] = 0x0;
-                GameHook.game.WriteBytes(collisionPtr, new byte[1] { 0x44 });
-                GameHook.game.WriteBytes(movePtr, new byte[1] { 0x01 });
-                GameHook.game.WriteBytes(airPtr, new byte[1] { 0x60 });
-            } else {
-                byteToWrite[0] = 0x1;
-                GameHook.game.WriteBytes(movePtr, new byte[1] { 0x05 });
-                GameHook.game.WriteBytes(airPtr, new byte[1] { 0x48 });
-                GameHook.game.WriteBytes(collisionPtr, new byte[1] { 0x40 });
-                GameHook.game.WriteBytes(clipmovePtr, BitConverter.GetBytes(0x00458CA0));
-            }
-            GameHook.game.WriteBytes(noclipPtr, byteToWrite);
+            //IncInj();
+            //byte[] byteToWrite = new byte[1];
+            //if(noclipFlag) {
+            //    byteToWrite[0] = 0x0;
+            //    GameHook.game.WriteBytes(collisionPtr, new byte[1] { 0x44 });
+            //    GameHook.game.WriteBytes(movePtr, new byte[1] { 0x01 });
+            //    GameHook.game.WriteBytes(airPtr, new byte[1] { 0x60 });
+            //} else {
+            //    byteToWrite[0] = 0x1;
+            //    GameHook.game.WriteBytes(movePtr, new byte[1] { 0x05 });
+            //    GameHook.game.WriteBytes(airPtr, new byte[1] { 0x48 });
+            //    GameHook.game.WriteBytes(collisionPtr, new byte[1] { 0x40 });
+            //    GameHook.game.WriteBytes(clipmovePtr, BitConverter.GetBytes(0x00458CA0));
+            //}
+            //GameHook.game.WriteBytes(noclipPtr, byteToWrite);
         }
 
         private void IncInj() {
