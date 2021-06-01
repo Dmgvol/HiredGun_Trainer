@@ -72,7 +72,8 @@
         
         <!--SECOND SECTION-->
         <Grid Grid.Row="0" VerticalAlignment="Bottom">
-            <Label Content="by dmgvol" Foreground="{StaticResource Text}"/>
+            <Label Content="by DmgVol, LongerWarrior" Foreground="{StaticResource Text}"/>
+            <Label x:Name="VersionLabel" HorizontalAlignment="Right" Foreground="{StaticResource Text}"/>
         </Grid>
 
         <Grid Background="{StaticResource Background}" Visibility="Hidden" x:Name="errorGrid">

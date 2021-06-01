@@ -7,6 +7,9 @@ using System.Windows.Media;
 namespace HiredGunTrainer {
     public partial class MainWindow : Window {
 
+        // GLOBAL
+        public const double VERSION = 0.5;
+
         // game speeds
         private float[] gameSpeeds = new float[4] { 1.0f, 2.0f, 4.0f, 0.5f };
         private int currGameSpeed = 0;
@@ -27,6 +30,7 @@ namespace HiredGunTrainer {
 
         public MainWindow() {
             InitializeComponent();
+            VersionLabel.Content = $"v{VERSION}";
             // game hook
             gameHook = new GameHook(this);
 
