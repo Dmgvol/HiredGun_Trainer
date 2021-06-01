@@ -87,7 +87,6 @@ namespace HiredGunTrainer {
                 }
             }
 
-
             speedLabel.Content = $"{(int)playerSpeed} m/s";
         }
 
@@ -120,15 +119,6 @@ namespace HiredGunTrainer {
 
         public void DerefPointers() {
             gameHook.EP.DerefPointers(GameHook.game);
-
-            xVelPtr = gameHook.EP.Pointers["PlayerCollision"].Item2 + 0xC4;
-            yVelPtr = gameHook.EP.Pointers["PlayerCollision"].Item2 + 0xC8;
-            zVelPtr = gameHook.EP.Pointers["PlayerCollision"].Item2 + 0xCC;
-            movePtr = gameHook.EP.Pointers["PlayerCollision"].Item2 + 0x168;
-            airPtr = gameHook.EP.Pointers["PlayerCollision"].Item2 + 0x388;
-            clipmovePtr = gameHook.EP.Pointers["PlayerCollision"].Item2 + 0x199;
-            collisionPtr = gameHook.EP.Pointers["PlayerObject"].Item2 + 0x5C;
-
         }
 
         private void ToggleGhost() {
@@ -150,28 +140,6 @@ namespace HiredGunTrainer {
 
             noclipFlag = !noclipFlag;
             ToggleState(noclipFlag, noclipLabel);
-
-            //IncInj();
-            //byte[] byteToWrite = new byte[1];
-            //if(noclipFlag) {
-            //    byteToWrite[0] = 0x0;
-            //    GameHook.game.WriteBytes(collisionPtr, new byte[1] { 0x44 });
-            //    GameHook.game.WriteBytes(movePtr, new byte[1] { 0x01 });
-            //    GameHook.game.WriteBytes(airPtr, new byte[1] { 0x60 });
-            //} else {
-            //    byteToWrite[0] = 0x1;
-            //    GameHook.game.WriteBytes(movePtr, new byte[1] { 0x05 });
-            //    GameHook.game.WriteBytes(airPtr, new byte[1] { 0x48 });
-            //    GameHook.game.WriteBytes(collisionPtr, new byte[1] { 0x40 });
-            //    GameHook.game.WriteBytes(clipmovePtr, BitConverter.GetBytes(0x00458CA0));
-            //}
-            //GameHook.game.WriteBytes(noclipPtr, byteToWrite);
-        }
-
-        private void IncInj() {
-            int current;
-            GameHook.game.ReadValue<int>(injPtr, out current);
-            GameHook.game.WriteBytes(injPtr, BitConverter.GetBytes(current + 1));
         }
 
         private void SavePosition() {

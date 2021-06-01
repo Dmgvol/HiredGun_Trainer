@@ -15,6 +15,12 @@ namespace HiredGunTrainer.MemoryUtils {
             }
         }
 
-        public void Add(string key, DeepPointer dp) => Pointers.Add(key, new Tuple<DeepPointer, IntPtr>(dp, IntPtr.Zero));
+        public void Add(string key, DeepPointer dp) {
+            if(!Pointers.ContainsKey(key)) {
+                Pointers.Add(key, new Tuple<DeepPointer, IntPtr>(dp, IntPtr.Zero)); // create new
+            } else {
+                Pointers[key] = new Tuple<DeepPointer, IntPtr>(dp, IntPtr.Zero); // override existing
+            }
+        }
     }
 }

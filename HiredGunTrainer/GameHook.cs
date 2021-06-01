@@ -81,11 +81,10 @@ namespace HiredGunTrainer {
 				default:
 					main.updateTimer.Stop();
 					Console.WriteLine(moduleSize.ToString());
-					System.Windows.MessageBox.Show("This game version (" + moduleSize.ToString() + ") is not supported.\nPlease Contact the developers.", "Unsupported Game Version", MessageBoxButton.OK, MessageBoxImage.Error);
+					MessageBox.Show("This game version (" + moduleSize.ToString() + ") is not supported.\nPlease Contact the developers.", "Unsupported Game Version", MessageBoxButton.OK, MessageBoxImage.Error);
 					Environment.Exit(0);
 					break;
 			}
 		}
-
 	}
 }
