@@ -1,0 +1,82 @@
+﻿<Window x:Class="HiredGunTrainer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HiredGunTrainer"
+        mc:Ignorable="d"
+        ResizeMode="CanMinimize"
+        Title="Necromunda: HiredGun Trainer" Height="330" Width="485" Background="{StaticResource Background}">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--FIRST/TOP SECTION-->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.8*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!--LEFT-->
+            <StackPanel>
+                <!--POS-->
+                <Label Content="Position" Style="{StaticResource LabelHeader}"/>
+                <Grid>
+
+                    <TextBlock x:Name="positionLabelBlock" Foreground="{StaticResource Text}" FontSize="18" Margin="10, 0">
+                        <Run Text="x"/><LineBreak/><Run Text="y"/><LineBreak/><Run Text="z"/>
+                    </TextBlock>
+
+                    <TextBlock x:Name="positionBlock" Foreground="{StaticResource Text}" FontSize="18" Margin="20, 0" HorizontalAlignment="Right" />
+                </Grid>
+
+                <!--SPEED-->
+                <Grid Margin="0, 20">
+                    <Label Content="Speed" Style="{StaticResource LabelHeader}" HorizontalAlignment="Left"/>
+                    <Label x:Name="speedLabel" VerticalContentAlignment="Bottom" Content="10.99 m/s" HorizontalAlignment="Right" Foreground="{StaticResource Text}" FontSize="18" Margin="10, 0"/>
+                </Grid>
+            </StackPanel>
+
+
+            <!--RIGHT-->
+            <Grid Grid.Column="1" Margin="0, 10">
+                <StackPanel>
+                    <Grid>
+                        <Button x:Name="ghostButton" Content="[F1] Ghost" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource Button}" Click="ghostButton_Click"/>
+                        <Label x:Name="ghostLabel" Content="OFF" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource LabelToggle}"/>
+                    </Grid>
+
+                    <Grid Margin="0, 10">
+                        <Button x:Name="godButton" Content="[F2] God" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource Button}" Click="godButton_Click"/>
+                        <Label x:Name="godLabel" Content="OFF" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource LabelToggle}"/>
+                    </Grid>
+
+                    <Grid>
+                        <Button x:Name="noclipButton" Content="[F3] NoClip" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource Button}" Click="noclipButton_Click" />
+                        <Label x:Name="noclipLabel" Content="OFF" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource LabelToggle}"/>
+                    </Grid>
+
+                    <Grid Margin="0, 10">
+                        <Button x:Name="gameSpeedButton" Content="[F4] Game Speed" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource Button}" Click="gameSpeedButton_Click"/>
+                        <Label x:Name="gameSpeedLabel" Content="1.0x" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource LabelToggle}"/>
+                    </Grid>
+
+                    <Button x:Name="SavePosButton" Margin="0, 10" Content="[F5] Save Position" HorizontalAlignment="Left" Width="250" VerticalAlignment="Top" Style="{StaticResource Button}" Click="SavePosButton_Click"/>
+                    <Button x:Name="TeleportButton" Content="[F6] Teleport" HorizontalAlignment="Left" Width="250" VerticalAlignment="Top" Style="{StaticResource Button}" Click="TeleportButton_Click"/>
+
+                </StackPanel>
+            </Grid>
+        </Grid>
+        
+        <!--SECOND SECTION-->
+        <Grid Grid.Row="0" VerticalAlignment="Bottom">
+            <Label Content="by dmgvol" Foreground="{StaticResource Text}"/>
+        </Grid>
+
+        <Grid Background="{StaticResource Background}" Visibility="Hidden" x:Name="errorGrid">
+            <Label x:Name="errorMsg" Content="" HorizontalAlignment="Center" Height="35" VerticalAlignment="Center" Width="auto" FontSize="20" Foreground="White"/>
+        </Grid>
+    </Grid>
+</Window>

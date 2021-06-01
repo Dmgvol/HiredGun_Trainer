@@ -1,0 +1,53 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    
+    
+    <!--COLORS-->
+    <SolidColorBrush x:Key="BackgroundLight" Color="#252f3f"/>
+    <SolidColorBrush x:Key="Background" Color="#FF292929"/>
+    <SolidColorBrush x:Key="LightColor" Color="#FF666666"/>
+    <SolidColorBrush x:Key="Accent" Color="#dd6b20"/>
+    
+    <SolidColorBrush x:Key="Text" Color="White"/>
+    
+    <!--LABELS-->
+    <Style x:Key="LabelHeader" TargetType="Label">
+        <Setter Property="Foreground" Value="{StaticResource Text}"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+
+    <Style x:Key="LabelToggle" TargetType="Label">
+        <Setter Property="Foreground" Value="Red"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Width" Value="46"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Height" Value="30"/>
+    </Style>
+    <!--BUTTONS-->
+    <Style x:Key="Button" TargetType="Button">
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="200"/>
+        <Setter Property="Foreground" Value="{StaticResource Text}"/>
+        <Setter Property="Background" Value="{StaticResource LightColor}"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="BorderBrush" Value="{StaticResource LightColor}"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Name="border" BorderThickness="0" BorderBrush="Transparent" Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource Accent}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+</ResourceDictionary>
