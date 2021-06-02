@@ -6,10 +6,12 @@
         xmlns:local="clr-namespace:HiredGunTrainer"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
-        Title="Necromunda: HiredGun Trainer" Height="330" Width="485" Background="{StaticResource Background}">
+        Title="Necromunda: HiredGun Trainer" Height="420" Width="485" Background="{StaticResource Background}">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
         <!--FIRST/TOP SECTION-->
@@ -22,9 +24,8 @@
             <!--LEFT-->
             <StackPanel>
                 <!--POS-->
-                <Label Content="Position" Style="{StaticResource LabelHeader}"/>
+                <Label Content="Position" Style="{StaticResource LabelHeader}" MouseUp="Label_MouseUp"/>
                 <Grid>
-
                     <TextBlock x:Name="positionLabelBlock" Foreground="{StaticResource Text}" FontSize="18" Margin="10, 0">
                         <Run Text="x"/><LineBreak/><Run Text="y"/><LineBreak/><Run Text="z"/>
                     </TextBlock>
@@ -35,48 +36,58 @@
                 <!--SPEED-->
                 <Grid Margin="0, 20">
                     <Label Content="Speed" Style="{StaticResource LabelHeader}" HorizontalAlignment="Left"/>
-                    <Label x:Name="speedLabel" VerticalContentAlignment="Bottom" Content="10.99 m/s" HorizontalAlignment="Right" Foreground="{StaticResource Text}" FontSize="18" Margin="10, 0"/>
+                    <Label x:Name="speedLabel" VerticalContentAlignment="Bottom" Content="0 m/s" HorizontalAlignment="Right" Foreground="{StaticResource Text}" FontSize="18" Margin="10, 0"/>
                 </Grid>
             </StackPanel>
-
 
             <!--RIGHT-->
             <Grid Grid.Column="1" Margin="0, 10">
                 <StackPanel>
+                    <!--Ghost-->    
                     <Grid>
                         <Button IsEnabled="False" Opacity="0.5" x:Name="ghostButton" Content="[F1] Ghost" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource Button}" Click="ghostButton_Click"/>
                         <Label x:Name="ghostLabel" Content="OFF" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource LabelToggle}"/>
                     </Grid>
-
+                    <!--God mode-->
                     <Grid Margin="0, 10">
                         <Button IsEnabled="False" Opacity="0.5" x:Name="godButton" Content="[F2] God" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource Button}" Click="godButton_Click"/>
                         <Label x:Name="godLabel" Content="OFF" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource LabelToggle}"/>
                     </Grid>
-
+                    <!--No clip-->
                     <Grid>
-                        <Button IsEnabled="False" Opacity="0.5" x:Name="noclipButton" Content="[F3] NoClip" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource Button}" Click="noclipButton_Click" />
+                        <Button x:Name="noclipButton" Content="[F3] NoClip" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource Button}" Click="noclipButton_Click" />
                         <Label x:Name="noclipLabel" Content="OFF" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource LabelToggle}"/>
                     </Grid>
-
+                    <!--Game Speed-->
                     <Grid Margin="0, 10">
-                        <Button IsEnabled="False" Opacity="0.5" x:Name="gameSpeedButton" Content="[F4] Game Speed" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource Button}" Click="gameSpeedButton_Click"/>
+                        <Button x:Name="gameSpeedButton" Content="[F4] Game Speed" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource Button}" Click="gameSpeedButton_Click"/>
                         <Label x:Name="gameSpeedLabel" Content="1.0x" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource LabelToggle}"/>
                     </Grid>
-
+                    <!--Teleport buttons-->
                     <Button x:Name="SavePosButton" Margin="0, 10" Content="[F5] Save Position" HorizontalAlignment="Left" Width="250" VerticalAlignment="Top" Style="{StaticResource Button}" Click="SavePosButton_Click"/>
                     <Button x:Name="TeleportButton" Content="[F6] Teleport" HorizontalAlignment="Left" Width="250" VerticalAlignment="Top" Style="{StaticResource Button}" Click="TeleportButton_Click"/>
-
                 </StackPanel>
             </Grid>
         </Grid>
-        
+
         <!--SECOND SECTION-->
-        <Grid Grid.Row="0" VerticalAlignment="Bottom">
+        <Grid Grid.Row="1">
+            <Label Content="Manual Teleport: (XYZ)" Foreground="{StaticResource Text}"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5, 0, 0, 0">
+                <TextBox TabIndex="1" x:Name="inputX" HorizontalAlignment="Left" Width="100" VerticalAlignment="Bottom" TextAlignment="Left" VerticalContentAlignment="Center"  Style="{StaticResource TextboxDark}" TextChanged="inputX_TextChanged"/>
+                <TextBox TabIndex="2" Margin="5, 0" x:Name="inputY" HorizontalAlignment="Left" Width="100" VerticalAlignment="Bottom"  TextAlignment="Left" Style="{StaticResource TextboxDark}"/>
+                <TextBox TabIndex="3" x:Name="inputZ" HorizontalAlignment="Left"  Width="100" VerticalAlignment="Bottom"  TextAlignment="Left" VerticalContentAlignment="Center" Style="{StaticResource TextboxDark}"/>
+                <Button  TabIndex="4" Margin="5, 0, 0, 0" x:Name="teleport" Content="[F7] Teleport" Width="130" Click="teleport_Click" Style="{StaticResource Button}"/>
+            </StackPanel>
+        </Grid>
+        
+        <!--THIRD SECTION-->
+        <Grid Grid.Row="2" VerticalAlignment="Bottom">
             <Label Content="by DmgVol, LongerWarrior" Foreground="{StaticResource Text}"/>
             <Label x:Name="VersionLabel" HorizontalAlignment="Right" Foreground="{StaticResource Text}"/>
         </Grid>
 
-        <Grid Background="{StaticResource Background}" Visibility="Hidden" x:Name="errorGrid">
+        <Grid Background="{StaticResource Background}" Visibility="Hidden" x:Name="errorGrid" Grid.RowSpan="2">
             <Label x:Name="errorMsg" Content="" HorizontalAlignment="Center" Height="35" VerticalAlignment="Center" Width="auto" FontSize="20" Foreground="White"/>
         </Grid>
     </Grid>

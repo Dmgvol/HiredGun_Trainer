@@ -33,6 +33,7 @@
         <Setter Property="Background" Value="{StaticResource LightColor}"/>
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="BorderBrush" Value="{StaticResource LightColor}"/>
+        <Setter Property="IsTabStop" Value="False"/>
 
         <Setter Property="Template">
             <Setter.Value>
@@ -48,6 +49,16 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-
     </Style>
+    <!--TEXTBOX-->
+    <Style x:Key="TextboxDark" TargetType="TextBox">
+        <Setter Property="Background" Value="{StaticResource LightColor}"/>
+        <Setter Property="Foreground" Value="{StaticResource Text}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    
+    
 </ResourceDictionary>

@@ -17,7 +17,12 @@ namespace HiredGunTrainer {
 
         public GameHook(MainWindow main) {
             this.main = main;
-        }
+
+			if(Process.GetProcesses().ToList().Count(x => x.ProcessName.Contains(Process.GetCurrentProcess().ProcessName)) > 1) {
+				MessageBox.Show("HiredGun Trainer is already running", "Already running!", MessageBoxButton.OK, MessageBoxImage.Error);
+				Environment.Exit(0);
+			}
+		}
 
 		public EasyPointers EP = new EasyPointers();
 
@@ -69,13 +74,16 @@ namespace HiredGunTrainer {
 
 		private void SetPointersByModuleSize(int moduleSize) {
 			switch(moduleSize) {
-				case 95641600:
-					Debug.WriteLine("found steam1");
+				case 95641600: case 95408128: // steam1/gog1
+					Debug.WriteLine("found steam1/gog1");
 					EP.Add("PlayerPos", new DeepPointer(0x05534880, 0x30, 0x250, 0x130, 0x1d0));
 					EP.Add("PlayerController", new DeepPointer(0x05534880, 0x30, 0x250, 0xE0, 0x0));
 					EP.Add("PlayerObject", new DeepPointer(0x05534880, 0x30, 0x250, 0x0));
 					EP.Add("PlayerCollision", new DeepPointer(0x05534880, 0x30, 0x250, 0x5c));
-
+					EP.Add("PlayerMovement", new DeepPointer(0x05534880, 0x30, 0x250, 0x288, 0x168));
+					EP.Add("FallMode", new DeepPointer(0x05534880, 0x30, 0x250, 0x288, 0x38C)); 
+					EP.Add("PlayerMoveComp", new DeepPointer(0x05534880, 0x30, 0x250, 0x288, 0x0));
+					EP.Add("GameSpeed", new DeepPointer(0x0554BBA0, 0x30, 0x258, 0x2e8));
 					break;
 
 				default:
