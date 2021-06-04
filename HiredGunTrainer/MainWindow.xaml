@@ -34,7 +34,7 @@
                 </Grid>
 
                 <!--SPEED-->
-                <Grid Margin="0, 20">
+                <Grid Margin="0, 20, 0, 0">
                     <Label Content="Speed" Style="{StaticResource LabelHeader}" HorizontalAlignment="Left"/>
                     <Label x:Name="speedLabel" VerticalContentAlignment="Bottom" Content="0 m/s" HorizontalAlignment="Right" Foreground="{StaticResource Text}" FontSize="18" Margin="10, 0"/>
                 </Grid>

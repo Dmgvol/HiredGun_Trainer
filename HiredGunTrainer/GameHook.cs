@@ -68,13 +68,11 @@ namespace HiredGunTrainer {
 			} catch(Exception) {
 				return;
 			}
-
 		}
-
 
 		private void SetPointersByModuleSize(int moduleSize) {
 			switch(moduleSize) {
-				case 95641600: case 95408128: // steam1/gog1
+				case 95641600: case 95408128: // steam1/gog1 - Release Version
 					Debug.WriteLine("found steam1/gog1");
 					EP.Add("PlayerPos", new DeepPointer(0x05534880, 0x30, 0x250, 0x130, 0x1d0));
 					EP.Add("PlayerController", new DeepPointer(0x05534880, 0x30, 0x250, 0xE0, 0x0));
@@ -85,11 +83,21 @@ namespace HiredGunTrainer {
 					EP.Add("PlayerMoveComp", new DeepPointer(0x05534880, 0x30, 0x250, 0x288, 0x0));
 					EP.Add("GameSpeed", new DeepPointer(0x0554BBA0, 0x30, 0x258, 0x2e8));
 					break;
-
+				case 96124928: // steam2 - Day 4 Update
+					Debug.WriteLine("found steam2"); 
+					EP.Add("PlayerPos", new DeepPointer(0x055A3A00, 0x30, 0x250, 0x130, 0x1d0));
+					EP.Add("PlayerController", new DeepPointer(0x055A3A00, 0x30, 0x250, 0xE0, 0x0));
+					EP.Add("PlayerObject", new DeepPointer(0x055A3A00, 0x30, 0x250, 0x0));
+					EP.Add("PlayerCollision", new DeepPointer(0x055A3A00, 0x30, 0x250, 0x5c));
+					EP.Add("PlayerMovement", new DeepPointer(0x055A3A00, 0x30, 0x250, 0x288, 0x168));
+					EP.Add("FallMode", new DeepPointer(0x055A3A00, 0x30, 0x250, 0x288, 0x38C));
+					EP.Add("PlayerMoveComp", new DeepPointer(0x055A3A00, 0x30, 0x250, 0x288, 0x0));
+					EP.Add("GameSpeed", new DeepPointer(0x055BAD20, 0x30, 0x258, 0x2E8));
+					break;
 				default:
 					main.updateTimer.Stop();
 					Console.WriteLine(moduleSize.ToString());
-					MessageBox.Show("This game version (" + moduleSize.ToString() + ") is not supported.\nPlease Contact the developers.", "Unsupported Game Version", MessageBoxButton.OK, MessageBoxImage.Error);
+					MessageBox.Show("This game version (" + moduleSize.ToString() + ") is not supported.\nPlease contact the developers.", "Unsupported Game Version", MessageBoxButton.OK, MessageBoxImage.Error);
 					Environment.Exit(0);
 					break;
 			}
