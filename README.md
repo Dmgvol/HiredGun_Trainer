@@ -8,6 +8,8 @@
  ![](HiredGunTrainer/Images/trainer.png)
  
 ## Controls
+- F1: One-Hit Enemies
+- F2: God mode
 - F3: Noclip
 - F4: Game Speed
 - F5: Save Position
