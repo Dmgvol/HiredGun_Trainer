@@ -43,14 +43,14 @@
             <!--RIGHT-->
             <Grid Grid.Column="1" Margin="0, 10">
                 <StackPanel>
-                    <!--Ghost-->    
+                    <!--OneHitEnemies-->    
                     <Grid>
-                        <Button IsEnabled="False" Opacity="0.5" x:Name="ghostButton" Content="[F1] Ghost" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource Button}" Click="ghostButton_Click"/>
-                        <Label x:Name="ghostLabel" Content="OFF" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource LabelToggle}"/>
+                        <Button x:Name="onehitButton" Content="[F1] One-Hit Enemies" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource Button}" Click="onehitButton_Click"/>
+                        <Label x:Name="onehitLabel" Content="OFF" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource LabelToggle}"/>
                     </Grid>
                     <!--God mode-->
                     <Grid Margin="0, 10">
-                        <Button IsEnabled="False" Opacity="0.5" x:Name="godButton" Content="[F2] God" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource Button}" Click="godButton_Click"/>
+                        <Button x:Name="godButton" Content="[F2] God" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource Button}" Click="godButton_Click"/>
                         <Label x:Name="godLabel" Content="OFF" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource LabelToggle}"/>
                     </Grid>
                     <!--No clip-->

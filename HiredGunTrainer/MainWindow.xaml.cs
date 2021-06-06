@@ -1,5 +1,6 @@
 ﻿using HiredGunTrainer.MemoryUtils;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
@@ -9,19 +10,20 @@ namespace HiredGunTrainer {
     public partial class MainWindow : Window {
 
         // GLOBAL
-        public const string VERSION = "0.6.1";
+        public const string VERSION = "0.6.5";
 
         // game speeds
         private float[] gameSpeeds = new float[4] { 1.0f, 2.0f, 4.0f, 0.5f };
         private int currGameSpeed = 0;
+        private bool knownGameSpeed = false;
         // player stats and flags
         private float[] savedPos = new float[5]{0, 0, 0,  0, 0};
-        private bool noclipFlag, ghostFlag, godFlag;
+        private bool noclipFlag, onehitFlag, godFlag;
         private double playerSpeed = 0;
         private float[] playerPos = new float[3] { 0, 0, 0};
 
         // pointers
-        private IntPtr xVelPtr, yVelPtr, zVelPtr;
+        private IntPtr xVelPtr, yVelPtr, godPtr;
 
         private GlobalKeyboardHook kbHook = new GlobalKeyboardHook();
         public Timer updateTimer;
@@ -35,8 +37,8 @@ namespace HiredGunTrainer {
 
             // hotkeys
             kbHook.KeyDown += InputKeyDown;
-            //kbHook.HookedKeys.Add(Keys.F1);
-            //kbHook.HookedKeys.Add(Keys.F2);
+            kbHook.HookedKeys.Add(Keys.F1);
+            kbHook.HookedKeys.Add(Keys.F2);
             kbHook.HookedKeys.Add(Keys.F3);
             kbHook.HookedKeys.Add(Keys.F4);
             kbHook.HookedKeys.Add(Keys.F5);
@@ -67,22 +69,35 @@ namespace HiredGunTrainer {
             GameHook.game.ReadBytes(gameHook.EP.Pointers["PlayerMovement"].Item2, 1, out flyingByte);
             if(flyingByte != null) noclipFlag = flyingByte[0] == 5;
             // player speed
-            float xVel, yVel, zVel;
+            float xVel, yVel;
             GameHook.game.ReadValue(xVelPtr, out xVel);
             GameHook.game.ReadValue(yVelPtr, out yVel);
-            GameHook.game.ReadValue(zVelPtr, out zVel);
             playerSpeed = Math.Floor(Math.Sqrt(xVel * xVel + yVel * yVel) + 0.5f) / 100;
+            // god
+            byte[] godByte;
+            GameHook.game.ReadBytes(godPtr, 1, out godByte);
+            if(godByte != null) godFlag = godByte[0] == 0;
+
             // game speed
             float speed;
             GameHook.game.ReadValue(gameHook.EP.Pointers["GameSpeed"].Item2 , out speed);
             // check if pre-defined speed
+            knownGameSpeed = false;
             for(int i = 0; i < gameSpeeds.Length; i++) {
-                if(gameSpeeds[i] == speed)
+                if(gameSpeeds[i] == speed) {
                     currGameSpeed = i;
+                    knownGameSpeed = true;
+                }
             }
+            // one hit
+            if(onehitFlag)
+                GameHook.game.WriteValue<float>(gameHook.EP.Pointers["WeaponDamage"].Item2, 99999);
+            // MapBeginTime
+            GameHook.game.WriteValue<float>(gameHook.EP.Pointers["MapBeginTime"].Item2, 99999);
+
 
             //// Update UI ////
-            ToggleState(ghostFlag, ghostLabel);
+            ToggleState(onehitFlag, onehitLabel);
             ToggleState(godFlag, godLabel);
             ToggleState(noclipFlag, noclipLabel);
             SetGameSpeed();
@@ -93,7 +108,7 @@ namespace HiredGunTrainer {
         private void InputKeyDown(object sender, KeyEventArgs e) {
             switch(e.KeyCode) {
                 case Keys.F1:
-                    ToggleGhost();
+                    ToggleOneHit();
                     break;
                 case Keys.F2:
                     ToggleGod();
@@ -126,16 +141,17 @@ namespace HiredGunTrainer {
             // Velocity
             xVelPtr = gameHook.EP.Pointers["PlayerMoveComp"].Item2 + 0xC4;
             yVelPtr = gameHook.EP.Pointers["PlayerMoveComp"].Item2 + 0xC8;
-            zVelPtr = gameHook.EP.Pointers["PlayerMoveComp"].Item2 + 0xCC;
+            //zVelPtr = gameHook.EP.Pointers["PlayerMoveComp"].Item2 + 0xCC;
+
+            // God byte
+            godPtr = gameHook.EP.Pointers["PlayerObject"].Item2 + 0x59;
         }
 
-        private void ToggleGhost() {
+        private void ToggleOneHit() {
             if(!gameHook.hooked) return;
 
-            ghostFlag = !ghostFlag;
-            ToggleState(ghostFlag, ghostLabel);
-
-            // Placeholder
+            onehitFlag = !onehitFlag;
+            ToggleState(onehitFlag, onehitLabel);
         }
 
         private void ToggleGod() {
@@ -144,7 +160,7 @@ namespace HiredGunTrainer {
             godFlag = !godFlag;
             ToggleState(godFlag, godLabel);
 
-            // Placeholder
+            GameHook.game.WriteBytes(godPtr, godFlag ? new byte[] { 0 } : new byte[] { 0x8D });
         }
 
         private void ToggleNoclip() {
@@ -189,9 +205,16 @@ namespace HiredGunTrainer {
         }
 
         private void SetGameSpeed() {
-            gameSpeedLabel.Content = $"{gameSpeeds[currGameSpeed]:0.0}x";
             if(!gameHook.hooked) return;
-            GameHook.game.WriteValue(gameHook.EP.Pointers["GameSpeed"].Item2, (float)gameSpeeds[currGameSpeed]);
+
+            // to avoid chaning when using slowmo skill
+            if(knownGameSpeed) {
+                gameSpeedLabel.Content = $"{gameSpeeds[currGameSpeed]:0.0}x";
+                GameHook.game.WriteValue(gameHook.EP.Pointers["GameSpeed"].Item2, (float)gameSpeeds[currGameSpeed]);
+            } else {
+                gameSpeedLabel.Content = "?.0x";
+            }
+            
         }
 
         #region UI
@@ -202,7 +225,7 @@ namespace HiredGunTrainer {
         }
 
         //// UI BUTTONS ////
-        private void ghostButton_Click(object sender, RoutedEventArgs e) => ToggleGhost();
+        private void onehitButton_Click(object sender, RoutedEventArgs e) => ToggleOneHit();
 
         // Manual Teleport
         private void teleport_Click(object sender, RoutedEventArgs e) {
@@ -219,11 +242,13 @@ namespace HiredGunTrainer {
         // ManualTP X coords text changed - parse if copy-paste
         private void inputX_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) {
             if(!string.IsNullOrEmpty(inputX.Text) && inputX.Text.Count(f => f == ' ') == 2) {
-                string[] coords = inputX.Text.Split(' ');
-                if(IsNumeric(coords[0]) && IsNumeric(coords[1]) && IsNumeric(coords[0])) {
-                    inputX.Text = coords[0].Trim().Replace(",", "");
-                    inputY.Text = coords[1].Trim().Replace(",", "");
-                    inputZ.Text = coords[2].Trim().Replace(",", "");
+                List<string> coords = inputX.Text.Split(' ').ToList();
+                for(int i = 0; i < coords.Count; i++)  coords[i] = coords[i].Replace(",", "").Trim();
+
+                if(coords?.Count == 3 && IsNumeric(coords[0]) && IsNumeric(coords[1]) && IsNumeric(coords[2])) {
+                    inputX.Text = coords[0];
+                    inputY.Text = coords[1];
+                    inputZ.Text = coords[2];
                 }
             }
         }
