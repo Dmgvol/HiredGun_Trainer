@@ -90,8 +90,18 @@ namespace HiredGunTrainer {
                 }
             }
             // one hit
-            if(onehitFlag)
+            if(onehitFlag) {
                 GameHook.game.WriteValue<float>(gameHook.EP.Pointers["WeaponDamage"].Item2, 99999);
+            } else {
+                float weaponDamage;
+                GameHook.game.ReadValue(gameHook.EP.Pointers["WeaponDamage"].Item2, out weaponDamage);
+                if(weaponDamage > 1000) {
+                    float baseWeaponDamage;
+                    GameHook.game.ReadValue(gameHook.EP.Pointers["WeaponDamageBase"].Item2, out baseWeaponDamage);
+                    GameHook.game.WriteValue<float>(gameHook.EP.Pointers["WeaponDamage"].Item2, baseWeaponDamage);
+                }
+            }
+
             // MapBeginTime
             GameHook.game.WriteValue<float>(gameHook.EP.Pointers["MapBeginTime"].Item2, 99999);
 

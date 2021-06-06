@@ -83,6 +83,7 @@ namespace HiredGunTrainer {
 					EP.Add("PlayerMoveComp", new DeepPointer(0x05534880, 0x30, 0x250, 0x288, 0x0));
 					EP.Add("GameSpeed", new DeepPointer(0x0554BBA0, 0x30, 0x258, 0x2e8));
 					EP.Add("WeaponDamage", new DeepPointer(0x05534880, 0x30, 0x250, 0x8d0, 0x410, 0x3c));
+					EP.Add("WeaponDamageBase", new DeepPointer(0x05534880, 0x30, 0x250, 0x8d0, 0x410, 0x38));
 					EP.Add("MapBeginTime", new DeepPointer(0x05534880, 0x30, 0x228, 0x348));
 					break;
 				case 96124928: // steam2 - Day 4 Update
@@ -96,6 +97,7 @@ namespace HiredGunTrainer {
 					EP.Add("PlayerMoveComp", new DeepPointer(0x055A3A00, 0x30, 0x250, 0x288, 0x0));
 					EP.Add("GameSpeed", new DeepPointer(0x055BAD20, 0x30, 0x258, 0x2E8));
 					EP.Add("WeaponDamage", new DeepPointer(0x055A3A00, 0x30, 0x250, 0x8d0, 0x410, 0x3c));
+					EP.Add("WeaponDamageBase", new DeepPointer(0x055A3A00, 0x30, 0x250, 0x8d0, 0x410, 0x38));
 					EP.Add("MapBeginTime", new DeepPointer(0x055A3A00, 0x30, 0x228, 0x348));
 					break;
 				default:
