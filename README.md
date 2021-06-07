@@ -16,6 +16,9 @@
 - F6: Teleport to saved position
 - F7: Teleport to manual position
 
+## Known Issues
+- Death planes will kill the player even if God mode is on.
+
 ## Credits
 Created by DmgVol, LongerWarrior</br>
 Special Thanks: Micrologist
