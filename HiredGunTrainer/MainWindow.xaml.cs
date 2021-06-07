@@ -10,7 +10,7 @@ namespace HiredGunTrainer {
     public partial class MainWindow : Window {
 
         // GLOBAL
-        public const string VERSION = "0.6.5";
+        public const string VERSION = "0.6.6";
 
         // game speeds
         private float[] gameSpeeds = new float[4] { 1.0f, 2.0f, 4.0f, 0.5f };
@@ -23,7 +23,7 @@ namespace HiredGunTrainer {
         private float[] playerPos = new float[3] { 0, 0, 0};
 
         // pointers
-        private IntPtr xVelPtr, yVelPtr, godPtr;
+        private IntPtr xVelPtr, yVelPtr, godPtr, godPtr1;
 
         private GlobalKeyboardHook kbHook = new GlobalKeyboardHook();
         public Timer updateTimer;
@@ -155,6 +155,7 @@ namespace HiredGunTrainer {
 
             // God byte
             godPtr = gameHook.EP.Pointers["PlayerObject"].Item2 + 0x59;
+            godPtr1 = gameHook.EP.Pointers["PlayerObject"].Item2 + 0x931;
         }
 
         private void ToggleOneHit() {
@@ -171,6 +172,7 @@ namespace HiredGunTrainer {
             ToggleState(godFlag, godLabel);
 
             GameHook.game.WriteBytes(godPtr, godFlag ? new byte[] { 0 } : new byte[] { 0x8D });
+            GameHook.game.WriteBytes(godPtr1, godFlag ? new byte[] { 1 } : new byte[] { 0 });
         }
 
         private void ToggleNoclip() {

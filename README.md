@@ -3,7 +3,7 @@
 
 # HiredGun_Trainer
  Necromunda: HiredGun Trainer</br>
- Compatible with the release version (Steam and GOG).
+ Compatible with the release version and patch 1.58474 (Steam and GOG).
  
  ![](HiredGunTrainer/Images/trainer.png)
  
@@ -15,9 +15,6 @@
 - F5: Save Position
 - F6: Teleport to saved position
 - F7: Teleport to manual position
-
-## Known Issues
-- Death planes will kill the player even if God mode is on.
 
 ## Credits
 Created by DmgVol, LongerWarrior</br>

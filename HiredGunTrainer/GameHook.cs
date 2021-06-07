@@ -86,8 +86,8 @@ namespace HiredGunTrainer {
 					EP.Add("WeaponDamageBase", new DeepPointer(0x05534880, 0x30, 0x250, 0x8d0, 0x410, 0x38));
 					EP.Add("MapBeginTime", new DeepPointer(0x05534880, 0x30, 0x228, 0x348));
 					break;
-				case 96124928: // steam2 - Day 4 Update
-					Debug.WriteLine("found steam2"); 
+				case 96124928: case 95891456:// steam2 - Day 4 Update & late GOG update
+					Debug.WriteLine("found steam2/gog2"); 
 					EP.Add("PlayerPos", new DeepPointer(0x055A3A00, 0x30, 0x250, 0x130, 0x1d0));
 					EP.Add("PlayerController", new DeepPointer(0x055A3A00, 0x30, 0x250, 0xE0, 0x0));
 					EP.Add("PlayerObject", new DeepPointer(0x055A3A00, 0x30, 0x250, 0x0));
