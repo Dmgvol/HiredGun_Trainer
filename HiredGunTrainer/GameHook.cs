@@ -100,6 +100,21 @@ namespace HiredGunTrainer {
 					EP.Add("WeaponDamageBase", new DeepPointer(0x055A3A00, 0x30, 0x250, 0x8d0, 0x410, 0x38));
 					EP.Add("MapBeginTime", new DeepPointer(0x055A3A00, 0x30, 0x228, 0x348));
 					break;
+				case 95600640: // steam 3 - July 2021
+					Debug.WriteLine("found steam3");
+					EP.Add("PlayerPos", new DeepPointer(0x05527E90, 0x30, 0x250, 0x130, 0x1d0));
+					EP.Add("PlayerController", new DeepPointer(0x05527E90, 0x30, 0x250, 0xE0, 0x0));
+					EP.Add("PlayerObject", new DeepPointer(0x05527E90, 0x30, 0x250, 0x0));
+					EP.Add("PlayerCollision", new DeepPointer(0x05527E90, 0x30, 0x250, 0x5c));
+					EP.Add("PlayerMovement", new DeepPointer(0x05527E90, 0x30, 0x250, 0x288, 0x168));
+					EP.Add("FallMode", new DeepPointer(0x05527E90, 0x30, 0x250, 0x288, 0x38C));
+					EP.Add("PlayerMoveComp", new DeepPointer(0x05527E90, 0x30, 0x250, 0x288, 0x0));
+					EP.Add("GameSpeed", new DeepPointer(0x0553F1B0, 0x30, 0x258, 0x2E8));
+					EP.Add("WeaponDamage", new DeepPointer(0x05527E90, 0x30, 0x250, 0x8d0, 0x410, 0x3c));
+					EP.Add("WeaponDamageBase", new DeepPointer(0x05527E90, 0x30, 0x250, 0x8d0, 0x410, 0x38));
+					EP.Add("MapBeginTime", new DeepPointer(0x05527E90, 0x30, 0x228, 0x348));
+					break;
+
 				default:
 					main.updateTimer.Stop();
 					Console.WriteLine(moduleSize.ToString());
