@@ -10,7 +10,7 @@ namespace HiredGunTrainer {
     public partial class MainWindow : Window {
 
         // GLOBAL
-        public const string VERSION = "0.6.7";
+        public const string VERSION = "0.6.8";
 
         // game speeds
         private float[] gameSpeeds = new float[4] { 1.0f, 2.0f, 4.0f, 0.5f };
