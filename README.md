@@ -8,6 +8,7 @@
  - Patch 1.58474 (Steam + GOG).
  - Patch 1.59216 (Steam).
  - Patch 1.59449 (Steam).
+ - Patch 1.59641 (Steam).
  
  ![](HiredGunTrainer/Images/trainer.png)
  
