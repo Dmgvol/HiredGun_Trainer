@@ -8,19 +8,18 @@ using System.Windows.Media;
 
 namespace HiredGunTrainer {
     public partial class MainWindow : Window {
-
         // GLOBAL
-        public const string VERSION = "0.6.9";
+        public const string VERSION = "0.7.0";
 
         // game speeds
         private float[] gameSpeeds = new float[4] { 1.0f, 2.0f, 4.0f, 0.5f };
         private int currGameSpeed = 0;
         private bool knownGameSpeed = false;
         // player stats and flags
-        private float[] savedPos = new float[5]{0, 0, 0,  0, 0};
+        private float[] savedPos = new float[5] { 0, 0, 0, 0, 0 };
         private bool noclipFlag, onehitFlag, godFlag;
         private double playerSpeed = 0;
-        private float[] playerPos = new float[3] { 0, 0, 0};
+        private float[] playerPos = new float[3] { 0, 0, 0 };
 
         // pointers
         private IntPtr xVelPtr, yVelPtr, godPtr, godPtr1;
@@ -65,7 +64,7 @@ namespace HiredGunTrainer {
             GameHook.game.ReadValue(gameHook.EP.Pointers["PlayerPos"].Item2 + 8, out z);
             playerPos = new float[3] { x, y, z };
             // flying
-            byte[] flyingByte = new byte[1] {0};
+            byte[] flyingByte = new byte[1] { 0 };
             GameHook.game.ReadBytes(gameHook.EP.Pointers["PlayerMovement"].Item2, 1, out flyingByte);
             if(flyingByte != null) noclipFlag = flyingByte[0] == 5;
             // player speed
@@ -80,7 +79,7 @@ namespace HiredGunTrainer {
 
             // game speed
             float speed;
-            GameHook.game.ReadValue(gameHook.EP.Pointers["GameSpeed"].Item2 , out speed);
+            GameHook.game.ReadValue(gameHook.EP.Pointers["GameSpeed"].Item2, out speed);
             // check if pre-defined speed
             knownGameSpeed = false;
             for(int i = 0; i < gameSpeeds.Length; i++) {
@@ -136,7 +135,7 @@ namespace HiredGunTrainer {
                     TeleportPlayer();
                     break;
                 case Keys.F7:
-                   teleport_Click(null, null);
+                    teleport_Click(null, null);
                     break;
                 default:
                     break;
@@ -155,7 +154,12 @@ namespace HiredGunTrainer {
 
             // God byte
             godPtr = gameHook.EP.Pointers["PlayerObject"].Item2 + 0x59;
-            godPtr1 = gameHook.EP.Pointers["PlayerObject"].Item2 + 0x931;
+            if(GameHook.gameversion == "steam6") {
+                godPtr1 = gameHook.EP.Pointers["PlayerObject"].Item2 + 0x971;
+            } else {
+                godPtr1 = gameHook.EP.Pointers["PlayerObject"].Item2 + 0x931;
+            }
+
         }
 
         private void ToggleOneHit() {
@@ -181,7 +185,7 @@ namespace HiredGunTrainer {
             noclipFlag = !noclipFlag;
             ToggleState(noclipFlag, noclipLabel);
 
-            GameHook.game.WriteBytes(gameHook.EP.Pointers["PlayerMovement"].Item2, noclipFlag ? new byte[] {05} : new byte[] {01});
+            GameHook.game.WriteBytes(gameHook.EP.Pointers["PlayerMovement"].Item2, noclipFlag ? new byte[] { 05 } : new byte[] { 01 });
             GameHook.game.WriteBytes(gameHook.EP.Pointers["FallMode"].Item2, noclipFlag ? new byte[] { 8 } : new byte[] { 40 });
             GameHook.game.WriteBytes(gameHook.EP.Pointers["PlayerCollision"].Item2, noclipFlag ? new byte[] { 40 } : new byte[] { 44 });
         }
@@ -192,7 +196,7 @@ namespace HiredGunTrainer {
             float vlook, hlook;
             GameHook.game.ReadValue(gameHook.EP.Pointers["PlayerController"].Item2 + 0x288, out vlook);
             GameHook.game.ReadValue(gameHook.EP.Pointers["PlayerController"].Item2 + 0x28C, out hlook);
-            savedPos = new float[5] { playerPos[0], playerPos[1], playerPos[2], vlook, hlook};
+            savedPos = new float[5] { playerPos[0], playerPos[1], playerPos[2], vlook, hlook };
         }
 
         private void TeleportPlayer() {
@@ -226,7 +230,7 @@ namespace HiredGunTrainer {
             } else {
                 gameSpeedLabel.Content = "?.0x";
             }
-            
+
         }
 
         #region UI
@@ -255,7 +259,7 @@ namespace HiredGunTrainer {
         private void inputX_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) {
             if(!string.IsNullOrEmpty(inputX.Text) && inputX.Text.Count(f => f == ' ') == 2) {
                 List<string> coords = inputX.Text.Split(' ').ToList();
-                for(int i = 0; i < coords.Count; i++)  coords[i] = coords[i].Replace(",", "").Trim();
+                for(int i = 0; i < coords.Count; i++) coords[i] = coords[i].Replace(",", "").Trim();
 
                 if(coords?.Count == 3 && IsNumeric(coords[0]) && IsNumeric(coords[1]) && IsNumeric(coords[2])) {
                     inputX.Text = coords[0];
@@ -268,7 +272,7 @@ namespace HiredGunTrainer {
         public bool IsNumeric(string value) => float.TryParse(value, out _);
         private void godButton_Click(object sender, RoutedEventArgs e) => ToggleGod();
         private void Label_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e) =>
-            System.Windows.Clipboard.SetText($"{playerPos[0]}, {playerPos[1]}, {playerPos[2]}"); 
+            System.Windows.Clipboard.SetText($"{playerPos[0]}, {playerPos[1]}, {playerPos[2]}");
 
         private void noclipButton_Click(object sender, RoutedEventArgs e) => ToggleNoclip();
         private void gameSpeedButton_Click(object sender, RoutedEventArgs e) => ChangeGameSpeed();
