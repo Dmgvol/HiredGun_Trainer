@@ -5,10 +5,11 @@
  Necromunda: HiredGun Trainer</br>
  Compatible with:
  - Release version.
- - Patch 1.58474 (Steam + GOG).
- - Patch 1.59216 (Steam).
- - Patch 1.59449 (Steam).
- - Patch 1.59641 (Steam).
+ - Patch 1.58474 
+ - Patch 1.59216
+ - Patch 1.59449
+ - Patch 1.59641
+ - Patch 1.60429
  
  ![](HiredGunTrainer/Images/trainer.png)
  
